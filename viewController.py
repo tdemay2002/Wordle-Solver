@@ -32,12 +32,12 @@ def solve(foundBoxes, includeBox, excludeBox, excludeBoxes, output):
     words = filterWordList(wordList, pattern)
 
     if (len(words) == 0):
-        print("No words found!")
-        exit()
-
+        printResults(patternAsString, True, output)
+        return
+        
     maxFrequency, sortedWords = sortWords(words)
 
-    printResults(patternAsString, len(words), maxFrequency, sortedWords, output)
+    printResults(patternAsString, True, output, len(words), maxFrequency, sortedWords)
     
 
 def getFoundWord(foundBoxes):

@@ -63,9 +63,14 @@ def sortWords(words):
     return positionMaxFrequency, sorted(words, key=rank_key, reverse=True)
 
 
-def printResults(builtEx, wordsLength, maxFrequency, sortedWords, textBox):
+def printResults(builtEx, textBox, found = False, wordsLength = list, maxFrequency = list, sortedWords = list):
     textBox.delete(1.0, tk.END)
-    textBox.insert(tk.END, (builtEx + "\n"))
+    textBox.insert(tk.END, ("Searching for (" + builtEx + ")\n"))
+    
+    if not found:
+        textBox.insert(tk.END, "No words were found! \n" + "\n")
+        return
+    
     textBox.insert(tk.END, f"{wordsLength} words were found: \n" + "\n")
     textBox.insert(tk.END, "Sort by: " + "\n")
     for i in range(5):
