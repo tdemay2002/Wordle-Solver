@@ -1,0 +1,13 @@
+FROM python:3.11-bullseye
+
+RUN apt-get update && apt-get install -y python3-tk sudo \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN useradd -ms /bin/bash user \
+&& usermod -aG sudo user \
+&& echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user \
+&& chmod 0440 /etc/sudoers.d/user
+
+ENV PATH="/home/user/.local/bin:${PATH}"
+
+USER user
