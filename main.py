@@ -5,16 +5,14 @@ import tkinter as tk
 
 window = None
 foundBoxes = []
-includeBox = None
 excludeBox = None
-excludeBoxes = []
+excludeAtBoxes = []
 output = None
 
 def main():
     global window
-    global includeBox
     global excludeBox
-    global excludeBoxes
+    global excludeAtBoxes
     global output
 
     window = tk.Tk()
@@ -24,34 +22,27 @@ def main():
     label = tk.Label(window, text="Found Letters (e.g. '---n-'): ")
     label.grid(row=0, column=0, columnspan=5, pady=(10,0))
     for i in range(5):
-        foundBox = tk.Entry(window, width=3, font=("Arial",18), justify="center", 
+        foundBox = tk.Entry(window, width=3, font=("Arial",18), justify="center", bg="green",
                             validate="key", validatecommand=(window.register(lambda char, foundBoxName: updateFoundBox(char, foundBoxName, window)), "%P", "%W"))
         foundBox.grid(row=1, column=i, padx=5, pady=10)
         foundBoxes.append(foundBox)
 
-    label = tk.Label(window, text="Include Anywhere (e.g. 'se'): ")
-    label.grid(row=2, column=0, columnspan=5, pady=(10,0))
-    includeBox = tk.Entry(window, width=10, font=("Arial",18), justify="center")
-    includeBox.grid(row=3, column=0, columnspan=5, pady=10)
+    label = tk.Label(window, text=f"Found, but wrong position (e.g. '-e--s'): ")
+    label.grid(row=4, column=0, columnspan=5, padx=5)
+    for i in range(5):
+        excludeFromBox = tk.Entry(window, width=3, font=("Arial",18), justify="center", bg="yellow")
+        excludeFromBox.grid(row=5, column=i, padx=5)
+        excludeAtBoxes.append(excludeFromBox)
 
     label = tk.Label(window, text="Exclude Entirely (e.g. 'gratphoyblid'): ")
-    label.grid(row=4, column=0, columnspan=5, pady=(10,0))
-    excludeBox = tk.Entry(window, width=10, font=("Arial",18), justify="center")
-    excludeBox.grid(row=5, column=0, columnspan=5, pady=10)
-
-    includeFrame = tk.Frame(window)
-    includeFrame.grid(row=6, column=0, columnspan=5, pady=(10,0))
-    for i in range(5):
-        label = tk.Label(includeFrame, text=f"Exclude from position {i}? ")
-        label.grid(row=6+i, column=0, padx=5)
-        excludeBox = tk.Entry(includeFrame, width=10, font=("Arial",18), justify="center")
-        excludeBox.grid(row=6+i, column=1, padx=5)
-        excludeBoxes.append(excludeBox)
+    label.grid(row=4+5, column=0, columnspan=5, pady=(10,0))
+    excludeBox = tk.Entry(window, width=10, font=("Arial",18), justify="center", bg="darkgrey")
+    excludeBox.grid(row=5+5, column=0, columnspan=5, pady=10)
 
 
-    button = tk.Button(window, text="Solve", command=lambda: solve(foundBoxes, includeBox, excludeBox, excludeBoxes, output))
+    button = tk.Button(window, text="Solve", command=lambda: solve(foundBoxes, excludeBox, excludeAtBoxes, output))
     button.grid(row=11, column=0, columnspan=5, pady=20)
-    button.bind("<Return>", lambda event: solve(foundBoxes, includeBox, excludeBox, excludeBoxes, output))
+    button.bind("<Return>", lambda event: solve(foundBoxes, excludeBox, excludeAtBoxes, output))
 
     output = scrolledtext.ScrolledText(
         window,

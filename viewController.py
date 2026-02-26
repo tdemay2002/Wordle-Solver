@@ -2,7 +2,7 @@ from core import buildRegex, filterWordList, sortWords, printResults
 from utils import downloadWords, validateFound, validateInclude, validateExclude, validateNotAtPos
 import tkinter as tk
 
-def solve(foundBoxes, includeBox, excludeBox, excludeBoxes, output):
+def solve(foundBoxes, excludeBox, excludeAtBoxes, output):
     fullList = downloadWords()
     wordList = []
     for word in fullList:
@@ -12,10 +12,6 @@ def solve(foundBoxes, includeBox, excludeBox, excludeBoxes, output):
     found = list(getFoundWord(foundBoxes).lower())
     if not validateFound(found):
         exit()
-        
-    include = list(includeBox.get().lower())
-    if not validateInclude(include):
-        exit()
 
     exclude = excludeBox.get().lower()
     if not validateExclude(exclude):
@@ -23,16 +19,19 @@ def solve(foundBoxes, includeBox, excludeBox, excludeBoxes, output):
         
     notAtPos = []
     for i in range(len(found)):
-        notAtPos.append(excludeBoxes[i].get().lower())
+        notAtPos.append(excludeAtBoxes[i].get().lower())
     if not validateNotAtPos(notAtPos):
         exit()
 
+    include = set("".join(notAtPos))
+    if not validateInclude(include):
+        exit()
 
     patternAsString, pattern = buildRegex(found, include, exclude, notAtPos)
     words = filterWordList(wordList, pattern)
 
     if (len(words) == 0):
-        printResults(patternAsString, True, output)
+        printResults(patternAsString, False, output)
         return
         
     maxFrequency, sortedWords = sortWords(words)
