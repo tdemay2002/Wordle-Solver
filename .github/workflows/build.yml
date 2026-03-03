@@ -23,10 +23,10 @@ jobs:
 
       - name: Build
         run: |
-          pyinstaller --onefile --noconfirm --clean your_app.py
+          pyinstaller --onefile --noconfirm --clean main.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: your_app-windows
+          name: main-windows
           path: dist/**
